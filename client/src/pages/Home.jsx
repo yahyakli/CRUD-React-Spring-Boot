@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import axios from "axios";
+import { Link } from 'react-router-dom';
 
 export default function Home() {
     const [users, setUsers] = useState([]);
@@ -11,6 +12,19 @@ export default function Home() {
     const loadUsers = async () => {
         const result = await axios.get("http://localhost:9090/users");
         setUsers(result.data); 
+    };
+
+    const handleDelete = (id) => {
+        const confirmDelete = window.confirm("Are you sure you want to delete this user?");
+        if (confirmDelete) {
+            axios.delete(`http://localhost:9090/user/${id}`)
+                .then(() => {
+                    loadUsers();
+                })
+                .catch((err) => {
+                    console.error("There was an error deleting the user!", err);
+                });
+        }
     };
 
     return (
@@ -53,18 +67,16 @@ export default function Home() {
                                         {user.email}
                                     </td>
                                     <td className="px-6 py-4 flex items-center justify-center">
-                                        <button className='bg-blue-600 py-2 px-4 rounded-lg mx-2 text-white hover:bg-blue-800 transition-all'>Vieu</button>
-                                        <button className='bg-green-600 py-2 px-4 rounded-lg mx-2 text-white hover:bg-green-800 transition-all'>Edit</button>
-                                        <button className='bg-red-600 py-2 px-4 rounded-lg mx-2 text-white hover:bg-red-800 transition-all'>Delete</button>
+                                        <Link to={`/uservieu/${user.id}`} className='bg-blue-600 py-2 px-4 rounded-lg mx-2 text-white hover:bg-blue-800 transition-all'>Vieu</Link>
+                                        <Link to={`/edituser/${user.id}`} className='bg-green-600 py-2 px-4 rounded-lg mx-2 text-white hover:bg-green-800 transition-all'>Edit</Link>
+                                        <button onClick={() => handleDelete(user.id)} className='bg-red-600 py-2 px-4 rounded-lg mx-2 text-white hover:bg-red-800 transition-all'>Delete</button>
                                     </td>
                                 </tr>
                             ))
                         ) : (
-                            <tr>
-                                <th colSpan="4" className="px-6 py-4 text-center">
-                                    Nothing for Now
-                                </th>
-                            </tr>
+                            <div className='text-center font-bold mt-5'>
+                                Nothing for Now
+                            </div>
                         )}
                     </tbody>
                 </table>

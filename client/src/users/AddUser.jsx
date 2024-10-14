@@ -9,6 +9,8 @@ export default function AddUser() {
         username: "",
         email: ""
     })
+
+    console.log(formData)
     
     const handleSubmit = (e) => {
         e.preventDefault();

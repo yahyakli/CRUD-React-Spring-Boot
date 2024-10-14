@@ -4,22 +4,23 @@ package com.yahya.fullstack_backend.model;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.Id;
+import org.hibernate.annotations.UuidGenerator;
 
 @Entity
 public class User {
 
     @Id
-    @GeneratedValue
-    private Long id;
+    @UuidGenerator
+    private String id;
     private String username;
     private String name;
     private String email;
 
-    public Long getId() {
+    public String getId() {
         return id;
     }
 
-    public void setId(Long id) {
+    public void setId(String id) {
         this.id = id;
     }
 
